@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B4A018AF25647AF100ACB6F0 /* ShowSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4A018AE25647AF100ACB6F0 /* ShowSelection.swift */; };
 		EC6BD6D324579CB100DC5EE0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6BD6D224579CB100DC5EE0 /* AppDelegate.swift */; };
 		EC6BD6D524579CB100DC5EE0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6BD6D424579CB100DC5EE0 /* SceneDelegate.swift */; };
 		EC6BD6D724579CB100DC5EE0 /* EmojiArtDocumentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6BD6D624579CB100DC5EE0 /* EmojiArtDocumentView.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B4A018AE25647AF100ACB6F0 /* ShowSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowSelection.swift; sourceTree = "<group>"; };
 		EC6BD6CF24579CB100DC5EE0 /* EmojiArt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EmojiArt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC6BD6D224579CB100DC5EE0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC6BD6D424579CB100DC5EE0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				EC6BD6EC245963C900DC5EE0 /* EmojiArtExtensions.swift */,
 				EC6BD6D224579CB100DC5EE0 /* AppDelegate.swift */,
 				EC6BD6D424579CB100DC5EE0 /* SceneDelegate.swift */,
+				B4A018AE25647AF100ACB6F0 /* ShowSelection.swift */,
 				EC6BD6D824579CB100DC5EE0 /* Assets.xcassets */,
 				EC6BD6DD24579CB100DC5EE0 /* LaunchScreen.storyboard */,
 				EC6BD6E024579CB100DC5EE0 /* Info.plist */,
@@ -169,6 +172,7 @@
 				EC6BD6F3245A48D100DC5EE0 /* OptionalImage.swift in Sources */,
 				EC6BD6F5245A48D100DC5EE0 /* AnimatableSystemFontModifier.swift in Sources */,
 				EC6BD6E724579CE000DC5EE0 /* EmojiArtDocument.swift in Sources */,
+				B4A018AF25647AF100ACB6F0 /* ShowSelection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
