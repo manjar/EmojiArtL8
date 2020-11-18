@@ -30,6 +30,9 @@ struct EmojiArtDocumentView: View {
                             .scaleEffect(self.zoomScale)
                             .offset(self.panOffset)
                     )
+                    .onTapGesture() {
+                        deselectAllEmojis()
+                    }
                         .gesture(self.doubleTapToZoom(in: geometry.size))
                     ForEach(self.document.emojis) { emoji in
                         Text(emoji.text)
@@ -42,8 +45,8 @@ struct EmojiArtDocumentView: View {
                     }
                 }
                 .clipped()
-                .gesture(self.panGesture())
-                .gesture(self.zoomGesture())
+                .simultaneousGesture(self.panGesture())
+                .simultaneousGesture(self.zoomGesture())
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
                 .onDrop(of: ["public.image","public.text"], isTargeted: nil) { providers, location in
                     // SwiftUI bug (as of 13.4)? the location is supposed to be in our coordinate system
@@ -73,6 +76,10 @@ struct EmojiArtDocumentView: View {
         } else {
             selectedEmoji.insert(emoji)
         }
+    }
+    
+    private func deselectAllEmojis() {
+        selectedEmoji.removeAll()
     }
     
     private func isSelected(forEmoji emoji: EmojiArt.Emoji) -> Bool {
