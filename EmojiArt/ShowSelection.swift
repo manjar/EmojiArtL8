@@ -10,23 +10,24 @@ import SwiftUI
 
 struct ShowSelection: ViewModifier {
     var isSelected: Bool
+    var position: CGPoint
+    var fontSize: CGFloat
     
     func body(content: Content) -> some View {
-        GeometryReader { geometry in
-            ZStack {
-                content
-                Rectangle()
-                    .stroke(lineWidth: 3.0)
-                    .frame(width: 100, height: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/, alignment: .center)
-                    .opacity(isSelected ? 1.0 : 0.0)
-            }
+        ZStack {
+            content
+            Rectangle()
+                .stroke(lineWidth: 3.0)
+                .opacity(isSelected ? 1.0 : 0.0)
+                .frame(width: fontSize, height: fontSize, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+                .position(position)
         }
     }
 }
 
 extension View {
-    func showSelection(isSelected: Bool) -> some View {
-        self.modifier(ShowSelection(isSelected: isSelected))
+    func showSelection(isSelected: Bool, atPosition position: CGPoint, withFontSize fontSize: CGFloat) -> some View {
+        self.modifier(ShowSelection(isSelected: isSelected, position: position, fontSize: fontSize))
     }
 }
 

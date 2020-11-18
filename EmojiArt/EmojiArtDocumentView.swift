@@ -35,7 +35,7 @@ struct EmojiArtDocumentView: View {
                         Text(emoji.text)
                             .font(animatableWithSize: emoji.fontSize * self.zoomScale)
                             .position(self.position(for: emoji, in: geometry.size))
-                            .showSelection(isSelected: isSelected(forEmoji: emoji))
+                            .showSelection(isSelected: isSelected(forEmoji: emoji), atPosition:self.position(for: emoji, in: geometry.size), withFontSize: emoji.fontSize * self.zoomScale)
                             .onTapGesture() {
                                 toggleSelection(forEmoji: emoji)
                             }
@@ -68,7 +68,7 @@ struct EmojiArtDocumentView: View {
     @State private var selectedEmoji = Set<EmojiArt.Emoji>()
     
     private func toggleSelection(forEmoji emoji: EmojiArt.Emoji) {
-        if selectedEmoji.contains(emoji) {
+        if selectedEmoji.contains(matching: emoji) {
             selectedEmoji.remove(emoji)
         } else {
             selectedEmoji.insert(emoji)
