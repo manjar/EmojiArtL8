@@ -13,13 +13,18 @@ struct EmojiArtDocumentView: View {
     
     var body: some View {
         VStack {
-            ScrollView(.horizontal) {
-                HStack {
-                    ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
-                        Text(emoji)
-                            .font(Font.system(size: self.defaultEmojiSize))
-                            .onDrag { NSItemProvider(object: emoji as NSString) }
+            HStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(EmojiArtDocument.palette.map { String($0) }, id: \.self) { emoji in
+                            Text(emoji)
+                                .font(Font.system(size: self.defaultEmojiSize))
+                                .onDrag { NSItemProvider(object: emoji as NSString) }
+                        }
                     }
+                }
+                Button("🗑") {
+                    deleteSelectedEmojis()
                 }
             }
             .padding(.horizontal)
@@ -38,16 +43,16 @@ struct EmojiArtDocumentView: View {
                         Text(emoji.text)
                             .font(animatableWithSize: emoji.fontSize * self.zoomScale)
                             .position(self.position(for: emoji, in: geometry.size))
-                            .showSelection(isSelected: isSelected(forEmoji: emoji), atPosition:self.position(for: emoji, in: geometry.size), withFontSize: emoji.fontSize * self.zoomScale)
                             .onTapGesture() {
                                 toggleSelection(forEmoji: emoji)
                             }
+                            .showSelection(isSelected: isSelected(forEmoji: emoji), atPosition:self.position(for: emoji, in: geometry.size), withFontSize: emoji.fontSize * self.zoomScale)
                             .simultaneousGesture(self.emojisPanGesture())
                     }
                 }
                 .clipped()
                 .gesture(self.backgroundPanGesture())
-                .simultaneousGesture(self.zoomGesture())
+                .gesture(self.zoomGesture())
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
                 .onDrop(of: ["public.image","public.text"], isTargeted: nil) { providers, location in
                     // SwiftUI bug (as of 13.4)? the location is supposed to be in our coordinate system
@@ -123,7 +128,7 @@ struct EmojiArtDocumentView: View {
         }
         .onEnded { finalDragGestureValue in
             for emoji in selectedEmoji {
-                document.moveEmoji(emoji, by:finalDragGestureValue.translation)
+                document.moveEmoji(emoji, by:finalDragGestureValue.translation / zoomScale)
             }
         }
     }
@@ -151,7 +156,7 @@ struct EmojiArtDocumentView: View {
         location = CGPoint(x: location.x * zoomScale, y: location.y * zoomScale)
         location = CGPoint(x: location.x + size.width/2, y: location.y + size.height/2)
         if selectedEmoji.contains(matching: emoji) {
-            location = CGPoint(x: location.x + emojisGesturePanOffset.width, y: location.y + emojisGesturePanOffset.height)
+            location = CGPoint(x: location.x + (emojisGesturePanOffset.width * zoomScale), y: location.y + (emojisGesturePanOffset.height * zoomScale))
         }
         location = CGPoint(x: location.x + panOffset.width, y: location.y + panOffset.height)
         return location
@@ -167,6 +172,12 @@ struct EmojiArtDocumentView: View {
             }
         }
         return found
+    }
+    
+    private func deleteSelectedEmojis() {
+        for emoji in selectedEmoji {
+            document.deleteEmoji(emoji)
+        }
     }
     
     private let defaultEmojiSize: CGFloat = 40
