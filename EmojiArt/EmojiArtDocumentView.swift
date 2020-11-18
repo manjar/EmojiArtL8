@@ -42,10 +42,11 @@ struct EmojiArtDocumentView: View {
                             .onTapGesture() {
                                 toggleSelection(forEmoji: emoji)
                             }
+                            .simultaneousGesture(self.emojisPanGesture())
                     }
                 }
                 .clipped()
-                .simultaneousGesture(self.panGesture())
+                .gesture(self.backgroundPanGesture())
                 .simultaneousGesture(self.zoomGesture())
                 .edgesIgnoringSafeArea([.horizontal, .bottom])
                 .onDrop(of: ["public.image","public.text"], isTargeted: nil) { providers, location in
@@ -103,7 +104,7 @@ struct EmojiArtDocumentView: View {
         (steadyStatePanOffset + gesturePanOffset) * zoomScale
     }
     
-    private func panGesture() -> some Gesture {
+    private func backgroundPanGesture() -> some Gesture {
         DragGesture()
             .updating($gesturePanOffset) { latestDragGestureValue, gesturePanOffset, transaction in
                 gesturePanOffset = latestDragGestureValue.translation / self.zoomScale
@@ -112,7 +113,20 @@ struct EmojiArtDocumentView: View {
             self.steadyStatePanOffset = self.steadyStatePanOffset + (finalDragGestureValue.translation / self.zoomScale)
         }
     }
-
+    
+    @GestureState private var emojisGesturePanOffset: CGSize = .zero
+    
+    private func emojisPanGesture() -> some Gesture {
+        DragGesture()
+            .updating($emojisGesturePanOffset) { latestDragGestureValue, emojisGesturePanOffset, transaction in
+                emojisGesturePanOffset = latestDragGestureValue.translation / self.zoomScale
+        }
+        .onEnded { finalDragGestureValue in
+            for emoji in selectedEmoji {
+                document.moveEmoji(emoji, by:finalDragGestureValue.translation)
+            }
+        }
+    }
     
     private func doubleTapToZoom(in size: CGSize) -> some Gesture {
         TapGesture(count: 2)
@@ -136,6 +150,9 @@ struct EmojiArtDocumentView: View {
         var location = emoji.location
         location = CGPoint(x: location.x * zoomScale, y: location.y * zoomScale)
         location = CGPoint(x: location.x + size.width/2, y: location.y + size.height/2)
+        if selectedEmoji.contains(matching: emoji) {
+            location = CGPoint(x: location.x + emojisGesturePanOffset.width, y: location.y + emojisGesturePanOffset.height)
+        }
         location = CGPoint(x: location.x + panOffset.width, y: location.y + panOffset.height)
         return location
     }
