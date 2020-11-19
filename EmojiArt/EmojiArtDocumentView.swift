@@ -26,6 +26,8 @@ struct EmojiArtDocumentView: View {
                 Button("🗑") {
                     deleteSelectedEmojis()
                 }
+                .disabled(!canDelete)
+                .opacity(canDelete ? 1.0 : 0.5)
             }
             .padding(.horizontal)
             GeometryReader { geometry in
@@ -87,10 +89,16 @@ struct EmojiArtDocumentView: View {
     
     private func toggleSelection(forEmoji emoji: EmojiArt.Emoji) {
         if selectedEmoji.contains(matching: emoji) {
+            print("removing \(emoji) from \(selectedEmoji)")
             selectedEmoji.remove(emoji)
         } else {
+            print("inserting \(emoji) into \(selectedEmoji)")
             selectedEmoji.insert(emoji)
         }
+    }
+    
+    var canDelete: Bool {
+        selectedEmoji.count > 0
     }
     
     private func deselectAllEmojis() {
